@@ -3,40 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UT Collector | Minecraft Hub</title>
+    <title>UT Collector | World Merger</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="app-container">
-        <header class="glass-header">
-            <h1>🎮 UT Collector</h1>
-            <nav class="tabs">
-                <button class="tab-btn active" onclick="showSection('upload')">📤 دمج</button>
-                <button class="tab-btn" onclick="showSection('gallery')">🎨 المعرض</button>
-                <button class="tab-btn" onclick="showSection('admin')">🛡️ سرية</button>
-            </nav>
-        </header>
+    <div class="pc-layout">
+        <div class="top-corner left" onclick="showSection('gallery')">🎨 المعرض</div>
+        <div class="top-corner right" onclick="showSection('admin')">🛡️ سرية</div>
 
-        <main class="main-content">
-            <section id="upload" class="content-section active">
-                <div class="card upload-box" onclick="document.getElementById('fileInput').click()">
-                    <div class="icon-anim">📦</div>
-                    <h3>ارفع المودات هنا</h3>
+        <main class="app-core">
+            <h1>UT Collector 🎮</h1>
+            
+            <section id="upload" class="section active">
+                <div class="drop-zone" onclick="document.getElementById('fileInput').click()">
+                    <div class="icon">📦</div>
+                    <p>ارفع المودات أو العالم هنا</p>
                     <input type="file" id="fileInput" multiple hidden>
                 </div>
-                <div id="modsList" class="mods-grid"></div>
-                <button class="main-btn" onclick="createMcaddon()">بدء الدمج الأسطوري 🔥</button>
+
+                <div class="control-panel card">
+                    <input type="text" id="packageName" placeholder="اسم التجميعة...">
+                    
+                    <div class="merge-option">
+                        <label class="switch">
+                            <input type="checkbox" id="mergeWorld" onchange="toggleWorldInput()">
+                            <span class="slider"></span>
+                        </label>
+                        <span>دمج المودات داخل عالم (.mcworld)</span>
+                    </div>
+
+                    <div id="worldInputArea" style="display:none;">
+                        <p>اختر ملف العالم المستهدف:</p>
+                        <input type="file" id="worldFile" accept=".mcworld">
+                    </div>
+
+                    <button class="fire-btn" onclick="startEngine()">بدء الدمج الأسطوري 🔥</button>
+                </div>
+                <div id="status" class="status-msg"></div>
             </section>
 
-            <section id="gallery" class="content-section">
-                <div id="galleryGrid" class="gallery-layout"></div>
+            <section id="gallery" class="section">
+                <h2>معرض الإبداعات</h2>
+                <div id="galleryGrid"></div>
             </section>
         </main>
-
-        <footer class="footer" ondblclick="triggerSecret()">
-            <p>© 2026 UT - اضغط مرتين هنا للدخول السري</p>
-        </div>
     </div>
     <script src="script.js"></script>
 </body>
