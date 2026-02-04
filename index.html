@@ -3,73 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UT Collector | Minecraft Mod Merger</title>
+    <title>UT Collector | Minecraft Hub</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="stars-bg"></div> <header class="main-header">
-        <div class="logo-area">
+    <div class="app-container">
+        <header class="glass-header">
             <h1>🎮 UT Collector</h1>
-            <p>نظام دمج المودات والعوالم الأسطوري</p>
+            <nav class="tabs">
+                <button class="tab-btn active" onclick="showSection('upload')">📤 دمج</button>
+                <button class="tab-btn" onclick="showSection('gallery')">🎨 المعرض</button>
+                <button class="tab-btn" onclick="showSection('admin')">🛡️ سرية</button>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <section id="upload" class="content-section active">
+                <div class="card upload-box" onclick="document.getElementById('fileInput').click()">
+                    <div class="icon-anim">📦</div>
+                    <h3>ارفع المودات هنا</h3>
+                    <input type="file" id="fileInput" multiple hidden>
+                </div>
+                <div id="modsList" class="mods-grid"></div>
+                <button class="main-btn" onclick="createMcaddon()">بدء الدمج الأسطوري 🔥</button>
+            </section>
+
+            <section id="gallery" class="content-section">
+                <div id="galleryGrid" class="gallery-layout"></div>
+            </section>
+        </main>
+
+        <footer class="footer" ondblclick="triggerSecret()">
+            <p>© 2026 UT - اضغط مرتين هنا للدخول السري</p>
         </div>
-        <nav class="glass-nav">
-            <button class="nav-btn active" onclick="showSection('upload')">📤 دمج</button>
-            <button class="nav-btn" onclick="showSection('gallery')">🎨 المعرض</button>
-            <button class="nav-btn" onclick="showSection('help')">❓ مساعدة</button>
-        </nav>
-    </header>
-
-    <main class="content">
-        <section id="upload" class="section active">
-            <div class="glass-card upload-zone" id="dropZone">
-                <div class="icon">🚀</div>
-                <h3>اضغط هنا لرفع ملفات .mcpack أو .mcworld</h3>
-                <input type="file" id="fileInput" multiple accept=".mcpack,.mcaddon,.zip,.mcworld" hidden>
-            </div>
-
-            <div id="fileListContainer" class="glass-card" style="display:none;">
-                <h4>📦 الملفات المختارة:</h4>
-                <div id="modsList" class="mini-list"></div>
-                
-                <div class="options-grid">
-                    <input type="text" id="packageName" placeholder="اسم التجميعة النهائية...">
-                    <label class="switch-container">
-                        <input type="checkbox" id="mergeWorld">
-                        <span class="slider"></span>
-                        دمج داخل عالم
-                    </label>
-                </div>
-                
-                <div id="worldInputArea" style="display:none;">
-                    <input type="file" id="worldFile" accept=".mcworld">
-                    <p class="hint">اختر ملف العالم (.mcworld) الذي تريد حقن المودات فيه</p>
-                </div>
-
-                <button class="action-btn" onclick="processAll()">ابدأ الدمج الأسطوري 🔥</button>
-            </div>
-        </section>
-
-        <section id="admin" class="section">
-            <div class="glass-card admin-panel">
-                <h2 class="gold-text">👨‍💼 لوحة التحكم المركزية</h2>
-                <div class="stats-grid">
-                    <div class="stat-item"><span>المستخدمين:</span> <b id="totalUsers">0</b></div>
-                    <div class="stat-item"><span>المعالجات:</span> <b id="storageSize">0</b></div>
-                </div>
-                <button class="danger-btn" onclick="adminLogout()">تسجيل خروج</button>
-            </div>
-        </section>
-        
-        <section id="gallery" class="section">
-            <div id="galleryGrid" class="gallery-layout"></div>
-        </section>
-    </main>
-
-    <footer class="footer" ondblclick="triggerAdmin()">
-        <p>&copy; 2026 UT Collector | اضغط مرتين هنا للدخول السري</p>
-    </footer>
-
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
