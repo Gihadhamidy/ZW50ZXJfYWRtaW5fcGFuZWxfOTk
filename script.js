@@ -9,18 +9,25 @@ function toggleWorldUI() {
 }
 
 function startEngine() {
-    const status = document.getElementById('statusMsg');
-    status.innerHTML = "⏳ جاري المعالجة... انتظر ثواني";
+    const status = document.getElementById('statusReport');
+    const isWorld = document.getElementById('mergeWorld').checked;
+    const worldFile = document.getElementById('worldFile').files[0];
+
+    status.innerHTML = "⏳ جاري المعالجة وحقن البيانات...";
     status.style.display = "block";
-    
+
     setTimeout(() => {
-        status.innerHTML = "✅ اكتملت العملية بنجاح!";
-    }, 3000);
+        if(isWorld && worldFile) {
+            status.innerHTML = `✅ تم دمج المودات في العالم: ${worldFile.name}`;
+        } else {
+            status.innerHTML = "✅ تم إنشاء التجميعة بنجاح!";
+        }
+    }, 2500);
 }
 
 function triggerSecret() {
-    const pass = prompt("أدخل الكود السري (gh10mdp):");
-    if(pass === "gh10mdp") {
-        alert("🔓 تم تفعيل وضع المشرف");
+    const code = prompt("أدخل كود الوصول:");
+    if(code === "gh10mdp") {
+        alert("🔓 تم فتح وضع المطور");
     }
 }
