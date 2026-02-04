@@ -1,35 +1,43 @@
-// الكود السري الخاص بك
-const ADMIN_PASSWORD = 'gh10mdp'; 
-
-// ميزة دمج المودات في العوالم
-async function createMcaddon() {
-    const packageName = document.getElementById('packageName').value.trim();
-    const isMergeWorld = document.getElementById('mergeWorld').checked;
-    const worldFile = document.getElementById('worldFile').files[0];
-
-    if (mods.length === 0) return showStatus('❌ ارفع مودات أولاً!', 'error');
-    if (!packageName) return showStatus('❌ أدخل اسم التجميعة', 'error');
-
-    showStatus('⏳ جاري المعالجة الأسطورية...', 'info');
-
-    // هنا يتم منطق الدمج (محاكاة لمنطق الجافا)
-    setTimeout(() => {
-        if (isMergeWorld && worldFile) {
-            showStatus(`✅ تم دمج المودات داخل العالم: ${worldFile.name}`, 'success');
-        } else {
-            showStatus(`✅ تم إنشاء التجميعة بنجاح: ${packageName}.mcaddon`, 'success');
-        }
-        // تنظيف القائمة بعد النجاح
-        mods = [];
-        updateModsList();
-    }, 2500);
+// ميزة التنقل بين الأقسام
+function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
 }
 
-// الزر السري لفتح لوحة التحكم (اضغط على الفوتر/الأسفل لفتحه)
-document.querySelector('.footer').addEventListener('dblclick', () => {
-    const code = prompt("أدخل كود الوصول (gh10mdp):");
-    if (code === ADMIN_PASSWORD) {
+// إظهار/إخفاء مدخل العالم
+function toggleWorldInput() {
+    const isChecked = document.getElementById('mergeWorld').checked;
+    document.getElementById('worldInputArea').style.display = isChecked ? 'block' : 'none';
+}
+
+// المحرك الرئيسي للدمج
+async function startEngine() {
+    const name = document.getElementById('packageName').value;
+    const isMerge = document.getElementById('mergeWorld').checked;
+    const world = document.getElementById('worldFile').files[0];
+
+    if(!name) return alert("أدخل اسم التجميعة أولاً!");
+
+    const status = document.getElementById('status');
+    status.innerHTML = "⏳ جاري الدمج وحقن البيانات...";
+    status.className = "status-msg info show";
+
+    // محاكاة عملية الدمج الأسطورية
+    setTimeout(() => {
+        if(isMerge && world) {
+            status.innerHTML = `✅ تم حقن المودات بنجاح داخل العالم: ${world.name}`;
+        } else {
+            status.innerHTML = `✅ تم إنشاء التجميعة: ${name}.mcaddon`;
+        }
+        status.className = "status-msg success show";
+    }, 3000);
+}
+
+// تفعيل الدخول السري gh10mdp
+function triggerSecret() {
+    const code = prompt("أدخل كود الوصول:");
+    if(code === "gh10mdp") {
+        alert("🔓 تم فتح الصلاحيات الكاملة");
         showSection('admin');
-        showStatus('🔓 تم فتح ميزات المشرف', 'success');
     }
-});
+}
