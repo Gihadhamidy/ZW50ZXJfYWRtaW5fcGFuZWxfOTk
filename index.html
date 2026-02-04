@@ -3,33 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UT Collector | World Merger</title>
+    <title>UT Collector | Pro</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="pc-layout">
-        <div class="top-corner left" onclick="showSection('gallery')">🎨 المعرض</div>
-        <div class="top-corner right" onclick="showSection('admin')">🛡️ سرية</div>
+    <div class="corner-btn left" onclick="showSection('gallery')">🎨 المعرض</div>
+    <div class="corner-btn right" onclick="triggerSecret()">🛡️ سرية</div>
 
-        <main class="app-core">
+    <div class="container">
+        <header>
             <h1>UT Collector 🎮</h1>
-            
+            <p>نظام دمج المودات والعوالم</p>
+        </header>
+
+        <main>
             <section id="upload" class="section active">
-                <div class="drop-zone" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-card" onclick="document.getElementById('fileInput').click()">
                     <div class="icon">📦</div>
-                    <p>ارفع المودات أو العالم هنا</p>
+                    <h3>ارفع المودات أو العالم (.mcworld)</h3>
                     <input type="file" id="fileInput" multiple hidden>
                 </div>
 
-                <div class="control-panel card">
-                    <input type="text" id="packageName" placeholder="اسم التجميعة...">
+                <div class="options-card">
+                    <input type="text" id="packageName" placeholder="اسم التجميعة النهائية...">
                     
-                    <div class="merge-option">
-                        <label class="switch">
-                            <input type="checkbox" id="mergeWorld" onchange="toggleWorldInput()">
-                            <span class="slider"></span>
-                        </label>
-                        <span>دمج المودات داخل عالم (.mcworld)</span>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="mergeWorld" onchange="toggleWorldUI()">
+                        <label for="mergeWorld">حقن المودات داخل عالم معين</label>
                     </div>
 
                     <div id="worldInputArea" style="display:none;">
@@ -37,9 +37,9 @@
                         <input type="file" id="worldFile" accept=".mcworld">
                     </div>
 
-                    <button class="fire-btn" onclick="startEngine()">بدء الدمج الأسطوري 🔥</button>
+                    <button class="btn-fire" onclick="startEngine()">بدء الدمج الأسطوري 🔥</button>
                 </div>
-                <div id="status" class="status-msg"></div>
+                <div id="statusMsg" class="status"></div>
             </section>
 
             <section id="gallery" class="section">
@@ -47,6 +47,10 @@
                 <div id="galleryGrid"></div>
             </section>
         </main>
+
+        <footer ondblclick="triggerSecret()">
+            <p>© 2026 UT - ضغطة مزدوجة هنا للكود السري</p>
+        </footer>
     </div>
     <script src="script.js"></script>
 </body>
