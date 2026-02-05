@@ -3,53 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UT Collector | Pro</title>
+    <title>بوت تجميع مودات Minecraft</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="pc-btn left-corner" onclick="showSection('gallery')">🎨 المعرض</div>
-    <div class="pc-btn right-corner" onclick="triggerSecret()">🛡️ سرية</div>
-
-    <div class="main-wrapper">
-        <header>
-            <h1>UT Collector 🎮</h1>
-            <p>نظام دمج المودات والعوالم الأسطوري</p>
-        </header>
-
-        <section id="upload" class="section active">
-            <div class="drop-card" onclick="document.getElementById('fileInput').click()">
-                <div class="icon-box">📦</div>
-                <h3>ارفع المودات أو العالم هنا</h3>
-                <input type="file" id="fileInput" multiple hidden>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>🎮 بوت تجميع مودات Minecraft</h1>
+                <p>عمل تجميعات لمودات بسرعة⚡</p>
             </div>
+            <nav class="nav">
+                <button class="nav-btn active" onclick="showSection('upload')">📤 الرفع</button>
+                <button class="nav-btn" onclick="showSection('admin')">)👨‍💼 لوحة التحكم</button>
+                <button class="nav-btn" onclick="showSection('gallery')">🎨  المعرض للتجميعات</button>
+                <button class="nav-btn" onclick="showSection('help')">❓ المساعدة</button>
+            </nav>
+        </div>
+    </header>
 
-            <div class="tools-card">
-                <input type="text" id="packageName" placeholder="اسم التجميعة النهائية...">
+    <main class="main">
+        <div class="container">
+            <!-- Upload Section -->
+            <section id="upload" class="section active">
+                <h2>📤 رفع المودات</h2>
                 
-                <div class="checkbox-area">
-                    <input type="checkbox" id="mergeWorld" onchange="toggleWorldUI()">
-                    <label for="mergeWorld">دمج المودات داخل ملف عالم (.mcworld)</label>
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📁</div>
+                    <h3>اسحب الملفات هنا أو اضغط للاختيار</h3>
+                    <p>جميع صيغ الملفات مدعومة ✅</p>
+                    <input type="file" id="fileInput" multiple style="display: none;">
                 </div>
 
-                <div id="worldInputArea" style="display:none;" class="sub-input">
-                    <p>اختر ملف العالم المستهدف:</p>
-                    <input type="file" id="worldFile" accept=".mcworld">
+                <div class="mods-list">
+                    <h3>المودات المرفوعة</h3>
+                    <div id="modsList" class="list"></div>
                 </div>
 
-                <button class="btn-fire" onclick="startEngine()">بدء الدمج الأسطوري 🔥</button>
+                <div class="form-group">
+                    <label for="packageName">اسم التجميعة:</label>
+                    <input type="text" id="packageName" placeholder="أدخل اسم التجميعة">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="mergeWorld">
+                        دمج في ملف عالم
+                    </label>
+                </div>
+
+                <div id="worldUpload" class="world-upload" style="display: none;">
+                    <label for="worldFile">اختر ملف العالم:</label>
+                    <input type="file" id="worldFile" accept=".mcworld,.mctemplate">
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="createMcaddon()">✅ إنشاء التجميعة</button>
+                    <button class="btn btn-secondary" onclick="clearMods()">🗑️ مسح الكل</button>
+                </div>
+
+                <div id="uploadStatus" class="status"></div>
+            </section>
+
+            <!-- Admin Section -->
+            <section id="admin" class="section">
+                <h2>👨‍💼 لوحة التحكم</h2>
+
+                <div id="adminLogin" class="admin-login">
+                    <div class="form-group">
+                        <label for="adminPassword">كلمة المرور:</label>
+                        <input type="password" id="adminPassword" placeholder="أدخل كلمة المرور">
+                    </div>
+                    <button class="btn btn-primary" onclick="adminLogin()">دخول</button>
+                </div>
+
+                <div id="adminPanel" class="admin-panel" style="display: none;">
+                    <div class="admin-menu">
+                        <button class="admin-btn" onclick="showAdminTab('broadcast')">📣 إرسال بث</button>
+                        <button class="admin-btn" onclick="showAdminTab('stats')">📊 الإحصائيات</button>
+                        <button class="admin-btn" onclick="showAdminTab('addart')">🖼️ إضافة عمل فني</button>
+                        <button class="admin-btn" onclick="showAdminTab('delart')">🗑️ حذف عمل فني</button>
+                        <button class="admin-btn logout" onclick="adminLogout()">🚪 خروج</button>
+                    </div>
+
+                    <div id="broadcastTab" class="admin-tab active">
+                        <h3>📣 إرسال بث</h3>
+                        <textarea id="broadcastMsg" placeholder="أدخل رسالة البث" rows="5"></textarea>
+                        <button class="btn btn-primary" onclick="sendBroadcast()">إرسال</button>
+                    </div>
+
+                    <div id="statsTab" class="admin-tab">
+                        <h3>📊 الإحصائيات</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value" id="totalUsers">0</div>
+                                <div class="stat-label">👤 إجمالي المستخدمين</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="totalArtworks">0</div>
+                                <div class="stat-label">🎨 الأعمال الفنية</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="storageSize">0</div>
+                                <div class="stat-label">💾 حجم التخزين</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="addartTab" class="admin-tab">
+                        <h3>🖼️ إضافة عمل فني</h3>
+                        <div class="form-group">
+                            <label for="artTitle">اسم العمل:</label>
+                            <input type="text" id="artTitle" placeholder="أدخل اسم العمل">
+                        </div>
+                        <div class="form-group">
+                            <label for="artFile">ملف .mcaddon:</label>
+                            <input type="file" id="artFile" accept=".mcaddon">
+                        </div>
+                        <div class="form-group">
+                            <label for="artThumb">صورة مصغرة:</label>
+                            <input type="file" id="artThumb" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label for="artDesc">الوصف:</label>
+                            <textarea id="artDesc" placeholder="أدخل وصف العمل" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="artAuthor">صاحب العمل:</label>
+                            <input type="text" id="artAuthor" placeholder="أدخل اسم صاحب العمل">
+                        </div>
+                        <button class="btn btn-primary" onclick="addArtwork()">إضافة</button>
+                    </div>
+
+                    <div id="delartTab" class="admin-tab">
+                        <h3>🗑️ حذف عمل فني</h3>
+                        <div class="form-group">
+                            <label for="delArtTitle">اسم العمل:</label>
+                            <input type="text" id="delArtTitle" placeholder="أدخل اسم العمل">
+                        </div>
+                        <button class="btn btn-danger" onclick="deleteArtwork()">حذف</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gallery Section -->
+            <section id="gallery" class="section">
+                <h2>🎨 معرض الأعمال الفنية</h2>
+                <div id="galleryGrid" class="gallery-grid"></div>
+            </section>
+
+            <!-- Help Section -->
+            <section id="help" class="section">
+                <h2>❓ المساعدة</h2>
+                <div class="help-content">
+                    <h3>✨ طريقة عمل تجميعة مودات خاصة بك</h3>
+                    <ol>
+                        <li>أرسل للبوت أي عدد من ملفات المودات من نوع <code>.mcpack</code> أو <code>.mcaddon</code></li>
+                        <li>بعد كل ملف، سيسألك البوت إذا كنت تريد إضافة المزيد</li>
+                        <li>عندما تنتهي، اضغط على زر <strong>"إنهاء"</strong></li>
+                        <li>سيطلب منك البوت إرسال <strong>اسم نهائي</strong> للتجميعة</li>
+                        <li>بعد إرسال الاسم، سيقوم البوت بدمج كل المودات في ملف <code>.mcaddon</code> واحد جاهز للتحميل!</li>
+                    </ol>
+
+                    <h3>📋 الملفات المدعومة</h3>
+                    <ul>
+                        <li><code>.mcpack</code> - حزمة Minecraft</li>
+                        <li><code>.mcaddon</code> - إضافة Minecraft</li>
+                        <li><code>.zip</code> - ملف مضغوط</li>
+                        <li><code>.mcworld</code> - عالم Minecraft</li>
+                        <li><code>.mctemplate</code> - قالب Minecraft</li>
+                    </ul>
+
+                    <h3>⚠️ ملاحظات مهمة</h3>
+                    <ul>
+                        <li>الحد الأقصى لحجم الملف الواحد: 20 MB</li>
+                        <li>الحد الأقصى للملف النهائي: 49 MB</li>
+                        <li>ملفات Java Edition (.jar) غير مدعومة</li>
+                        <li>سيتم حذف الملفات المؤقتة بعد 30 دقيقة من عدم النشاط</li>
+                    </ul>
+
+                    <h3>🆘 حل المشاكل</h3>
+                    <div class="faq">
+                        <div class="faq-item">
+                            <h4>❓ لماذا الملف لا يرفع؟</h4>
+                            <p>تأكد من أن حجم الملف أقل من 20 MB وأن الصيغة مدعومة</p>
+                        </div>
+                        <div class="faq-item">
+                            <h4>❓ كيف أدمج المودات في عالم؟</h4>
+                            <p>اختر خيار "دمج في ملف عالم" وارفع ملف العالم</p>
+                        </div>
+                        <div class="faq-item">
+                            <h4>❓ هل يمكن رفع ملفات Java Edition؟</h4>
+                            <p>لا، البوت يدعم فقط ملفات Bedrock Edition</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 بوت تجميع مودات ut_mods | جميع الحقوق محفوظة</p>
+            <div class="social">
+                <a href="https://t.me/ut_mods" target="_blank">📱 Telegram</a>
+                <a href="ut_mods6@gmail.com">📧 البريد</a>
             </div>
-            <div id="statusReport" class="status-box"></div>
-        </section>
+        </div>
+    </footer>
 
-        <section id="gallery" class="section">
-            <h2>🎨 معرض الإبداعات</h2>
-            <div id="galleryGrid" class="gallery-layout"></div>
-        </section>
-
-        <footer ondblclick="triggerSecret()">
-            <p>© 2026 UT - اضغط مرتين هنا للكود السري</p>
-        </footer>
-    </div>
     <script src="script.js"></script>
 </body>
 </html>
